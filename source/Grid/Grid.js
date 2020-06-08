@@ -283,6 +283,7 @@ class Grid extends React.PureComponent<Props, State> {
     style: {},
     tabIndex: 0,
     isScrollingOptOut: false,
+    listWrapper: (children) => children
   };
 
   // Invokes onSectionRendered callback only when start/stop row or column indices change
@@ -976,6 +977,7 @@ class Grid extends React.PureComponent<Props, State> {
       style,
       tabIndex,
       width,
+      listWrapper,
     } = this.props;
     const {instanceProps, needToResetStyleCache} = this.state;
 
@@ -1054,23 +1056,21 @@ class Grid extends React.PureComponent<Props, State> {
           ...style,
         }}
         tabIndex={tabIndex}>
-        {childrenToDisplay.length > 0 && (
-          <div
-            className="ReactVirtualized__Grid__innerScrollContainer"
-            role={containerRole}
-            style={{
-              width: autoContainerWidth ? 'auto' : totalColumnsWidth,
-              height: totalRowsHeight,
-              maxWidth: totalColumnsWidth,
-              maxHeight: totalRowsHeight,
-              overflow: 'hidden',
-              pointerEvents: isScrolling ? 'none' : '',
-              position: 'relative',
-              ...containerStyle,
-            }}>
-            {childrenToDisplay}
-          </div>
-        )}
+        <div
+          className="ReactVirtualized__Grid__innerScrollContainer"
+          role={containerRole}
+          style={{
+            width: autoContainerWidth ? 'auto' : totalColumnsWidth,
+            height: totalRowsHeight,
+            maxWidth: totalColumnsWidth,
+            maxHeight: totalRowsHeight,
+            overflow: 'hidden',
+            pointerEvents: isScrolling ? 'none' : '',
+            position: 'relative',
+            ...containerStyle,
+          }}>
+          {listWrapper(childrenToDisplay)}
+        </div>
         {showNoContentRenderer && noContentRenderer()}
       </div>
     );
